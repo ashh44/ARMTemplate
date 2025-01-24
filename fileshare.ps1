@@ -9,7 +9,7 @@ $RootPath="\\$StorageAccount.file.core.windows.net\$FileShareName"
 cmd.exe /C "cmdkey /add:"$StorageAccount.file.core.windows.net" /user:"$StorageAccount" /pass:"$StorageKey""
 
 # Mount the file share
-New-PSDrive -Name $MountPath -PSProvider FileSystem -Root $RootPath  -Persist
+New-PSDrive -Name $MountPath -PSProvider FileSystem -Root $RootPath -Persist
 
 # Confirm the drive is mounted
 Get-PSDrive | Where-Object { $_.Name -eq $MountPath }
