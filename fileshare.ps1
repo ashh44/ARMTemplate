@@ -6,7 +6,7 @@ $MountPath = "X"
 $RootPath="\\$StorageAccount.file.core.windows.net\$FileShareName"
 
 # Save credentials
-cmd.exe /C "cmdkey /add:"$StorageAccount.file.core.windows.net" /user:"$StorageAccount" /pass:"$StorageKey""
+cmd.exe /C "cmdkey /add:`"$($StorageAccount).file.core.windows.net`" /user:`"$StorageAccount`" /pass:`"$StorageKey`""
 
 # Mount the file share
 New-PSDrive -Name $MountPath -PSProvider FileSystem -Root $RootPath -Persist
