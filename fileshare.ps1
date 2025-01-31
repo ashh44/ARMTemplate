@@ -18,6 +18,7 @@ cmd.exe /C "cmdkey /add:`"$SAName.file.core.windows.net`" /user:`"$SAName`" /pas
 
 Write-Host "Mounting file share $FSName from storage account $SAName to $MountPath" -ForegroundColor Cyan
 # Mount the file share
-New-PSDrive -Name $MountPath -PSProvider FileSystem -Root $RootPath -Persist
+
+cmd.exe /C "net use ${MountPath}: ${RootPath} /user:${SAName} ${SAKey}"
 
 Write-Host "Confirming the drive is mounted" -ForegroundColor Green
