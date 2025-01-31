@@ -1,15 +1,23 @@
-# Set variables
-$StorageAccount = "mystoragenew1234567"
-$FileShareName = "cirrusfileshare"
-$StorageKey = "5AjazBGvc3aAXEf5KAkAZi9Nlrb19aTH80LBuMLDuOFJ7FovPf9m9VIarvsSNUFBQeOdsOnBrE66+AStUphkWg=="
-$MountPath = "X"
-$RootPath="\\$StorageAccount.file.core.windows.net\$FileShareName"
+param (
+    [Parameter(Mandatory=$true)][String]$SAKey,
+    [Parameter(Mandatory=$true)][String]$SAName,
+    [Parameter(Mandatory=$true)][String]$FSName,
+    [Parameter(Mandatory=$true)][String]$MountPath
+)
 
+if (-not $SAKey -or -not $SAName -or -not $FSName -or -not $MountPath) {
+    Write-Host "Missing req parameters Usage:" -ForegroundColor Red 
+    Write-Host "  .\fileshare.ps1 -SAKey <StorageAccountKey> -SAName <StorageAccountName> -FSName <FileShareName> -MountPath <MountPath>" -ForegroundColor Yellow
+    exit 1
+}
+$RootPath="\\$SAName.file.core.windows.net\$FSName"
+
+Write-Host "Attempting to mount the file share $FSName from storage account $SAName to $MountPath" -ForegroundColor Cyan
 # Save credentials
-cmd.exe /C "cmdkey /add:`"$($StorageAccount).file.core.windows.net`" /user:`"$StorageAccount`" /pass:`"$StorageKey`""
+cmd.exe /C "cmdkey /add:`"$SAName.file.core.windows.net`" /user:`"$SAName`" /pass:`"$SAKey`""
 
+Write-Host "Mounting file share $FSName from storage account $SAName to $MountPath" -ForegroundColor Cyan
 # Mount the file share
 New-PSDrive -Name $MountPath -PSProvider FileSystem -Root $RootPath -Persist
 
-# Confirm the drive is mounted
-Get-PSDrive | Where-Object { $_.Name -eq $MountPath }
+Write-Host "Confirming the drive is mounted" -ForegroundColor Green
