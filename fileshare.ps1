@@ -19,12 +19,14 @@ cmdkey /list
 
 cmdkey /delete:"$SAName.file.core.windows.net"
 
-$SAKey=$SAKey.Trim()
+$SAKey=[System.Text.Encoding]::UTF8.GetString([System.Text.Encoding]::UTF8.GetBytes($SAKey))
+
+$SAKey=$SAKey.Trim() -replace '\s',''
 
 
 $RootPath="\\$SAName.file.core.windows.net\$FSName"
 $UserName="localhost\$SAName"
-$UserName=$UserName.Trim()
+$UserName=$UserName.Trim() 
 
 Write-Host "User Name: $UserName" -ForegroundColor Cyan 
 
