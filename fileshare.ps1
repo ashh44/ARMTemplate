@@ -11,6 +11,10 @@ if (-not $SAKey -or -not $SAName -or -not $FSName -or -not $MountPath) {
     exit 1
 }
 
+if(Test-Path "$MountPath") {
+    net use ${MountPath}: /delete /y
+}
+
 
 
 $RootPath="\\$SAName.file.core.windows.net\$FSName"
@@ -24,13 +28,32 @@ Write-Host "File Share Name: $FSName" -ForegroundColor Cyan
 Write-Host "Mount Path: $MountPath" -ForegroundColor Cyan
 
 Write-Host "Attempting to mount the file share $FSName from storage account $SAName to $MountPath" -ForegroundColor Cyan
-# Save credentials
-# cmd.exe /C "cmdkey /add:`"$SAName.file.core.windows.net`" /user:`"$UserName`" /pass:`"$SAKey`""
-cmd.exe /C "cmdkey /add:`"$($SAName).file.core.windows.net`" /user:`"$($UserName)`" /pass:`"$($SAKey)`""
+# # Save credentials
+# # cmd.exe /C "cmdkey /add:`"$SAName.file.core.windows.net`" /user:`"$UserName`" /pass:`"$SAKey`""
+# cmd.exe /C "cmdkey /add:`"$($SAName).file.core.windows.net`" /user:`"$($UserName)`" /pass:`"$($SAKey)`""
+
+
+
+# Write-Host "Mounting file share $FSName from storage account $SAName to $MountPath" -ForegroundColor Cyan
+# # Mount the file share
+
+# cmd.exe /C "net use ${MountPath}: ${RootPath} /user:${UserName} ${SAKey}"
+
+
+# Write-Host "Confirming the drive is mounted" -ForegroundColor Green
+
+Test-NetConnection -ComputerName "$SAName.file.core.windows.net" -Port 445 
+$cmdKeyCommand = "cmdkey /add:`"$($SAName).file.core.windows.net`" /user:`"$($UserName)`" /pass:`"$($SAKey)`""
+Write-Host "Executing: $cmdKeyCommand" -ForegroundColor Yellow
+cmd.exe /C $cmdKeyCommand
 
 Write-Host "Mounting file share $FSName from storage account $SAName to $MountPath" -ForegroundColor Cyan
-# Mount the file share
 
-cmd.exe /C "net use ${MountPath}: ${RootPath} /user:${UserName} ${SAKey}"
+# Mount the file share
+$netUseCommand = "net use ${MountPath}: ${RootPath} /user:${UserName} ${SAKey}"
+Write-Host "Executing: $netUseCommand" -ForegroundColor Yellow
+cmd.exe /C $netUseCommand
 
 Write-Host "Confirming the drive is mounted" -ForegroundColor Green
+
+
