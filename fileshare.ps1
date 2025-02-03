@@ -12,6 +12,11 @@ if (-not $SAKey -or -not $SAName -or -not $FSName -or -not $MountPath) {
 }
 $RootPath="\\$SAName.file.core.windows.net\$FSName"
 
+Write-Host "Storage Account Name: $SAName" -ForegroundColor Cyan
+Write-Host "Storage Account Key: $SAKey" -ForegroundColor Cyan
+Write-Host "File Share Name: $FSName" -ForegroundColor Cyan
+Write-Host "Mount Path: $MountPath" -ForegroundColor Cyan
+
 Write-Host "Attempting to mount the file share $FSName from storage account $SAName to $MountPath" -ForegroundColor Cyan
 # Save credentials
 cmd.exe /C "cmdkey /add:`"$SAName.file.core.windows.net`" /user:`"$SAName`" /pass:`"$SAKey`""
