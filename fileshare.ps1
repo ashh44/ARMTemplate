@@ -15,15 +15,22 @@ if(Test-Path "$MountPath") {
     net use ${MountPath}: /delete /y
 }
 
+cmdkey /list
+
+cmdkey /delete:"$SAName.file.core.windows.net"
+
+$SAKey=$SAKey.Trim()
 
 
 $RootPath="\\$SAName.file.core.windows.net\$FSName"
 $UserName="localhost\$SAName"
+$UserName=$UserName.Trim()
 
 Write-Host "User Name: $UserName" -ForegroundColor Cyan 
 
 Write-Host "Storage Account Name: $SAName" -ForegroundColor Cyan
 Write-Host "Storage Account Key: $SAKey" -ForegroundColor Cyan
+Write-Host "length of Storage Account Key: $($SAKey.Length)" -ForegroundColor Cyan
 Write-Host "File Share Name: $FSName" -ForegroundColor Cyan
 Write-Host "Mount Path: $MountPath" -ForegroundColor Cyan
 
